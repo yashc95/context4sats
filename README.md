@@ -1,4 +1,3 @@
-# context4sats
 Best Classes for identification: 'ship','large-vehicle','plane','storage-tank'
 Small-vehicle appears too much and will bias classification
 
@@ -30,7 +29,13 @@ For YOLO labels, the classes are:
 2 = 'ship'
 3 = 'storage-tank'
 Images with no class have empty text files
-The labels follow the standard YOLO format: class-id, x_center, y_center, width, height
-Hopefully there are enough to train well. Don't have exact counts, but should be roughly proportional to the counts in the "full set" above.
 
-The files YOLO_Transform.py and construct_dataset.py go into the data_transform folder of the DOTA_YOLOv2 Devkit. Just replace the files of the same name with the files here and you can replicate the data generation process I used.
+Split Train: 4764 (Clean: 3134)
+Split Val: 587 (Clean: 385)
+Split Test: 795 (Clean: 534)
+
+Cleaned and Balanced Data:
+Test(288 images): (1093 planes, 820 large-vehicles, 5182 ships, 1559 storage-tanks)
+Val(631 images): (2404 planes, 1386 large-vehicles, 5496 ships, 1369 storage-tanks)
+
+Val does have more planes than test, but the others are relatively even.
