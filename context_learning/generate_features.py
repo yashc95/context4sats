@@ -58,7 +58,10 @@ class featureExtractor:
                     feats.append(0)
             if useDists:
                 for keynum in range(self.num_classes):
-                    feats.append(d[str(keynum)])
+                    if str(keynum) in c.keys():
+                        feats.append(d[str(keynum)]/c[str(keynum)])
+                    else:
+                        feats.append(d[str(keynum)])
             out.append((feats,label))
         return out
 
