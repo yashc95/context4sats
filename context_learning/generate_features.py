@@ -34,7 +34,7 @@ class featureExtractor:
         for i in range(len(lines)):
             c = collections.Counter()
             words = lines[i].split()
-            label = words[0]
+            label = int(words[0])
             if useDists:
                 d = {'0': 0, '1': 0, '2': 0, '3':0}
                 x = float(words[1])
@@ -59,12 +59,13 @@ class featureExtractor:
             if useDists:
                 for keynum in range(self.num_classes):
                     if str(keynum) in c.keys():
-                        feats.append(d[str(keynum)]/c[str(keynum)])
+                        feats.append(1/(d[str(keynum)]/c[str(keynum)]))
                     else:
                         feats.append(d[str(keynum)])
             out.append((feats,label))
         return out
-"""
+# Add directionality to macro image objects
+# Encode color
 # Usage Example
 f = featureExtractor('./split_test_clean_balanced')
 feat_pairs = f.subImageCounts('P0128__1__633___0',True)
