@@ -64,7 +64,8 @@ class featureExtractor:
                         feats.append(d[str(keynum)])
             out.append((feats,label))
         return out
-
+"""
 # Usage Example
 f = featureExtractor('./split_test_clean_balanced')
 feat_pairs = f.subImageCounts('P0128__1__633___0',True)
+"""

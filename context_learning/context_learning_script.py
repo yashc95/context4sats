@@ -10,25 +10,33 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
-## TO REPLACE WITH THE DATA
-n = 1000
 n_classes = 4
-X = np.random.randint(0, 10, (n, n_classes))
-Y = np.random.randint(0, n_classes, (n, 1))
-print(Y)
-## TO REPLACE WITH THE DATA
+
+import generate_features
+
+f = generate_features.featureExtractor('./split_data_yolo_cleaned/split_train_clean')
+data_list = []
+n_files = len(f.files)
+i = 0
+for file in f.files:
+    i+=1
+    if i%100==0:
+        print("{}/{}".format(i, n_files))
+    for pair in f.subImageCounts(file, False):
+        l = pair[0]+[int(pair[1])]
+        data_list.append(l)
+data = np.array(data_list)
+    
 
 
 # Process data 
 
-n_data, n_classes = X.shape
+n_data = data.shape[0]
+n_classes = data.shape[1]-1
 n_val = n_data // 10
 n_test = n_val
 n_train = n_data - n_val - n_test
 
-data = np.zeros((n_data, n_classes + 1))
-data[:, :n_classes] = X
-data[:, -1] = Y.reshape(data[:, -1].shape)
 np.random.shuffle(data)
 
 X_train = data[:n_train, :-1]
@@ -38,12 +46,12 @@ Y_val = data[n_train:n_train+n_val, -1]
 X_test = data[n_train+n_val:, :-1]
 Y_test = data[n_train+n_val:, -1]
 
-print(data)
+#print(data)
 
 
 # Standard sklearn classifiers: https://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html
 
-names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", "Gaussian Process",
+names = ["Nearest Neighbors", "Linear SVM", "RBF SVM", #"Gaussian Process",
          "Decision Tree", "Random Forest", "Neural Net", "AdaBoost",
          "Naive Bayes", "QDA"]
 
@@ -51,7 +59,7 @@ classifiers = [
     KNeighborsClassifier(3),
     SVC(kernel="linear", C=0.025),
     SVC(gamma=2, C=1),
-    GaussianProcessClassifier(1.0 * RBF(1.0)),
+    #GaussianProcessClassifier(1.0 * RBF(1.0)),
     DecisionTreeClassifier(max_depth=5),
     RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
     MLPClassifier(alpha=1, max_iter=1000),
@@ -64,4 +72,3 @@ for name, clf in zip(names, classifiers):
     clf.fit(X_train, Y_train)
     print("Fitted")
     print("Score: ", clf.score(X_val, Y_val))
-
