@@ -72,3 +72,49 @@ for name, clf in zip(names, classifiers):
     clf.fit(X_train, Y_train)
     print("Fitted")
     print("Score: ", clf.score(X_val, Y_val))
+    
+    
+    
+"""
+Results obtained:
+
+Fitting classifier Nearest Neighbors ...
+Fitted
+Score:  0.965687053217
+Fitting classifier Linear SVM ...
+Fitted
+Score:  0.918347895155
+Fitting classifier RBF SVM ...
+Fitted
+Score:  0.973153296267
+Fitting classifier Decision Tree ...
+Fitted
+Score:  0.928196981732
+Fitting classifier Random Forest ...
+Fitted
+Score:  0.930738681493
+Fitting classifier Neural Net ...
+Fitted
+Score:  0.931850675139
+Fitting classifier AdaBoost ...
+Fitted
+Score:  0.916441620334
+Fitting classifier Naive Bayes ...
+Fitted
+Score:  0.841620333598
+Fitting classifier QDA ...
+Fitted
+Score:  0.841302621128
+    
+"""    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
