@@ -15,7 +15,7 @@ n_classes = 4
 import generate_features
 
 f = generate_features.featureExtractor('./split_data_yolo_cleaned/split_train_clean')
-data_list = []
+train_data_list = []
 n_files = len(f.files)
 i = 0
 for file in f.files:
@@ -24,29 +24,30 @@ for file in f.files:
         print("{}/{}".format(i, n_files))
     for pair in f.subImageCounts(file, False):
         l = pair[0]+[int(pair[1])]
-        data_list.append(l)
-data = np.array(data_list)
+        train_data_list.append(l)
+data_train = np.array(train_data_list)
+
+f = generate_features.featureExtractor('./split_data_yolo_cleaned/split_val_clean_balanced')
+val_data_list = []
+n_files = len(f.files)
+i = 0
+for file in f.files:
+    i+=1
+    if i%100==0:
+        print("{}/{}".format(i, n_files))
+    for pair in f.subImageCounts(file, False):
+        l = pair[0]+[int(pair[1])]
+        val_data_list.append(l)
+data_val = np.array(val_data_list)
     
 
 
 # Process data 
+X_train = data_train[:, :-1]
+Y_train = data_train[:, -1]
+X_val = data_val[:, :-1]
+Y_val = data_val[:, -1]
 
-n_data = data.shape[0]
-n_classes = data.shape[1]-1
-n_val = n_data // 10
-n_test = n_val
-n_train = n_data - n_val - n_test
-
-np.random.shuffle(data)
-
-X_train = data[:n_train, :-1]
-Y_train = data[:n_train, -1]
-X_val = data[n_train:n_train+n_val, :-1]
-Y_val = data[n_train:n_train+n_val, -1]
-X_test = data[n_train+n_val:, :-1]
-Y_test = data[n_train+n_val:, -1]
-
-#print(data)
 
 
 # Standard sklearn classifiers: https://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html
