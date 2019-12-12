@@ -152,8 +152,10 @@ class featureExtractor:
             out.append([new_feats,pair[1]])
         return out
 
-# Add directionality to macro image objects
+def computeUpdatedProbs(yolo_preds, context_preds):
+    """Returns a dict of the predicted probability for an image given its yolo-predicted probabilities for each class"""
 # Encode color
+
 # Usage Example
 """
 f = featureExtractor('./split_test_clean_balanced')
