@@ -90,10 +90,10 @@ class featureExtractor:
          [class 0 count, class 1 count,...class 3 count, eff_0, ..., eff_3, avg dir 0, ... avg dir 3]
         """
         # First gather the rows in the yolo_labels file for the given image:
-        count_same_image = self.subImageCounts(file,useDists,useMacro = True)
+        count_same_image = self.subImageCounts(file,True,useMacro = True)
         comps = file.split('_')
-        x0 = float(comps[4])
-        y0 = float(comps[7])
+        x0 = float(comps[4])/1024
+        y0 = float(comps[7])/1024
         out = []
 
         for pair in count_same_image:
@@ -116,8 +116,8 @@ class featureExtractor:
                         for line in f:
                             lines.append(line)
                     sub_comps = sub.split('_')
-                    rowx0 = float(sub_comps[4])
-                    rowy0 = float(sub_comps[7])
+                    rowx0 = float(sub_comps[4])/1024
+                    rowy0 = float(sub_comps[7])/1024
                     for j in range(len(lines)):
                         rowwords = lines[j].split()
                         rowclass = rowwords[0]
@@ -152,14 +152,9 @@ class featureExtractor:
             out.append([new_feats,pair[1]])
         return out
 
-def computeUpdatedProbs(yolo_preds, context_preds):
-    """Returns a dict of the predicted probability for an image given its yolo-predicted probabilities for each class"""
+# Add directionality to macro image objects
 # Encode color
-
 # Usage Example
-"""
 f = featureExtractor('./split_test_clean_balanced')
 feat_pairs = f.macroImageCounts('P0128__1__633___0',useDists = True, useDirs = True)
 x = 2
-"""
-
