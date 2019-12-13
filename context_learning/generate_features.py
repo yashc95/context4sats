@@ -102,7 +102,7 @@ class featureExtractor:
          [class 0 count, class 1 count,...class 3 count, eff_0, ..., eff_3, avg dir 0, ... avg dir 3]
         """
         # First gather the rows in the yolo_labels file for the given image:
-        count_same_image = self.subImageCounts(file,useDists =True,useMacro = True, hotFix = True)
+        count_same_image = self.subImageCounts(file,useDists =True,useMacro = True, hotFix = hotFix)
         comps = file.split('_')
         x0 = float(comps[4])/1024
         y0 = float(comps[7])/1024
@@ -168,10 +168,11 @@ class featureExtractor:
                         new_feats.append(total_dirs[str(keynum)])
             out.append([new_feats,pair[1]])
         return out
-
+"""
 # Add directionality to macro image objects
 # Encode color
 # Usage Example
 f = featureExtractor('./split_test_clean_balanced')
 feat_pairs = f.macroImageCounts('P0128__1__633___0',useDists = True, useDirs = True)
 x = 2
+"""
