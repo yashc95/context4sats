@@ -23,7 +23,7 @@ class featureExtractor:
                 else:
                     self.macro_list[macro_name].append(filename[0:-4])
 
-    def subImageCounts(self,file, useDists = False, useMacro = False):
+    def subImageCounts(self,file, useDists = False, useMacro = False, hotFix = True):
         """
         Generates features using surrounding object counts for each object in the provided image
         :param file: The number of the image you want to look at (everything in the name besides the extensions)
@@ -42,17 +42,29 @@ class featureExtractor:
         for i in range(len(lines)):
             c = collections.Counter()
             words = lines[i].split()
-            label = int(words[0])
+            if hotFix:
+                label = int(words[4])
+            else:
+                label = int(words[0])
             if useDists:
                 d = {'0': 0, '1': 0, '2': 0, '3':0}
-                x = float(words[1])
-                y = float(words[2])
+                if hotFix:
+                    x = float(words[0])/1024
+                    y = float(words[1])/1024
+                else:
+                    x = float(words[1])
+                    y = float(words[2])
             for j in range(len(lines)):
                 if i != j:
                     rowwords = lines[j].split()
-                    rowclass = rowwords[0]
-                    rowx = float(rowwords[1])
-                    rowy = float(rowwords[2])
+                    if hotFix:
+                        rowclass = rowwords[4]
+                        rowx = float(rowwords[0])/1024
+                        rowy = float(rowwords[1])/1024
+                    else:
+                        rowclass = rowwords[0]
+                        rowx = float(rowwords[1])
+                        rowy = float(rowwords[2])
                     c.update(rowclass)
                     if useDists:
                         dist = ((rowy - y) ** 2 + (rowx - x) ** 2) ** (0.5)
@@ -76,7 +88,7 @@ class featureExtractor:
                 out.append((feats,label,[x,y]))
         return out
 
-    def macroImageCounts(self,file,useDirs = False, useColors = False, useDists = False):
+    def macroImageCounts(self,file,useDirs = False, useColors = False, useDists = False, hotFix = True):
         """
         Generates features for every object in an image using counts in the overall macro-image. Also has options to use
         mean direction for each class (in radians), mean distance to each class, and average color of the macro-image as features
@@ -90,7 +102,7 @@ class featureExtractor:
          [class 0 count, class 1 count,...class 3 count, eff_0, ..., eff_3, avg dir 0, ... avg dir 3]
         """
         # First gather the rows in the yolo_labels file for the given image:
-        count_same_image = self.subImageCounts(file,True,useMacro = True)
+        count_same_image = self.subImageCounts(file,useDists =True,useMacro = True, hotFix = True)
         comps = file.split('_')
         x0 = float(comps[4])/1024
         y0 = float(comps[7])/1024
@@ -120,9 +132,14 @@ class featureExtractor:
                     rowy0 = float(sub_comps[7])/1024
                     for j in range(len(lines)):
                         rowwords = lines[j].split()
-                        rowclass = rowwords[0]
-                        rowx = float(rowwords[1]) + rowx0
-                        rowy = float(rowwords[2]) + rowy0
+                        if hotFix:
+                            rowclass = rowwords[4]
+                            rowx = float(rowwords[0]) / 1024 + rowx0
+                            rowy = float(rowwords[1]) / 1024 + rowy0
+                        else:
+                            rowclass = rowwords[0]
+                            rowx = float(rowwords[1]) + rowx0
+                            rowy = float(rowwords[2]) + rowy0
                         class_counts[rowclass] +=1
                         if useDists:
                             dist = ((rowy - loc[1]) ** 2 + (rowx - loc[0]) ** 2) ** (0.5)
