@@ -21,8 +21,6 @@ x1, y1, x2, y2, x3, y3, x4, y4, category, difficult
 Where difficult is whether the particular classification is traditionally hard for classifiers.
 If you want to use smaller images with the individual bounding boxes let me know. I can do that pretty easily.
 
-Also the val and test set distributions are a little wonky now but can be readjusted to be better if you want smaller images with just one bounding box per image. Was just hard to get an even distribution with the large images since some images have like 100s of a particular class in them. 
-
 For YOLO labels, the classes are:
 0 = 'plane'
 1 = 'large-vehicle'
@@ -33,9 +31,3 @@ Images with no class have empty text files
 Split Train: 4764 (Clean: 3134)
 Split Val: 587 (Clean: 385)
 Split Test: 795 (Clean: 534)
-
-Cleaned and Balanced Data:
-Test(288 images): (1093 planes, 820 large-vehicles, 5182 ships, 1559 storage-tanks)
-Val(631 images): (2404 planes, 1386 large-vehicles, 5496 ships, 1369 storage-tanks)
-
-Val does have more planes than test, but the others are relatively even.
